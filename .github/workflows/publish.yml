@@ -25,6 +25,7 @@ jobs:
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Bump patch version in SKILL.md
+        if: ${{ !contains(github.event.head_commit.message, '[no-bump]') }}
         run: |
           python3 << 'PY'
           import re
