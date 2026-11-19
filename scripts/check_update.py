@@ -18,7 +18,10 @@ import sys
 import time
 import urllib.request
 
-REMOTE_URL = "https://raw.githubusercontent.com/zhashushu/bilei-skill/main/SKILL.md"
+SOURCES = [
+    ("github-raw", "https://raw.githubusercontent.com/zhashushu/bilei-skill/main/SKILL.md"),
+    ("jsdelivr", "https://cdn.jsdelivr.net/gh/zhashushu/bilei-skill@main/SKILL.md"),
+]
 CACHE_DIR = os.path.expanduser("~/.cache/bilei-skill")
 CACHE_FILE = os.path.join(CACHE_DIR, "update-check.json")
 TTL_SECONDS = 24 * 3600
@@ -37,11 +40,19 @@ def read_local_version():
 
 
 def fetch_remote_version():
-    req = urllib.request.Request(REMOTE_URL, headers={"User-Agent": "bilei-update-check"})
-    with urllib.request.urlopen(req, timeout=TIMEOUT_SECONDS) as resp:
-        text = resp.read().decode("utf-8", "replace")
-    match = re.search(r'^version:\s*"([^"]+)"', text, re.M)
-    return match.group(1) if match else None
+    """按优先级尝试多个源，返回 (version, source_name)。"""
+    last_error = None
+    for name, url in SOURCES:
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "bilei-update-check"})
+            with urllib.request.urlopen(req, timeout=TIMEOUT_SECONDS) as resp:
+                text = resp.read().decode("utf-8", "replace")
+            match = re.search(r'^version:\s*"([^"]+)"', text, re.M)
+            if match:
+                return match.group(1), name
+        except Exception as exc:  # 换下一个源
+            last_error = exc
+    raise last_error if last_error else RuntimeError("no source available")
 
 
 def parse_ver(v):
@@ -99,7 +110,7 @@ def main():
         "has_update": False,
         "level": None,
         "checked_at": time.strftime("%Y-%m-%d %H:%M", time.localtime(now)),
-        "source": "github",
+        "source": "github-raw",
         "cached": False,
     }
 
@@ -108,18 +119,15 @@ def main():
     else:
         cached = None if force else load_cache()
         if cached and now - int(cached.get("ts", 0)) < TTL_SECONDS and cached.get("remote"):
-            result.update(remote=cached["remote"], cached=True)
+            result.update(remote=cached["remote"], cached=True, source=cached.get("source", "github-raw"))
         elif simulate:
             # 测试模式不写缓存，避免污染真实检查结果
             result.update(remote=simulate, source="simulated")
         else:
             try:
-                remote = fetch_remote_version()
-                if not remote:
-                    result.update(status="skipped", reason="远端 SKILL.md 未找到 version")
-                else:
-                    result.update(remote=remote)
-                    save_cache({"ts": now, "remote": remote})
+                remote, src = fetch_remote_version()
+                result.update(remote=remote, source=src)
+                save_cache({"ts": now, "remote": remote, "source": src})
             except Exception as exc:  # 网络失败一律静默
                 result.update(status="skipped", reason="远端不可达: %s" % type(exc).__name__)
 
