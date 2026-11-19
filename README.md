@@ -125,10 +125,22 @@ bilei-skill/
 │   ├── source-credibility.md       # 证据等级 L1–L4、信源七类、投毒信号清单
 │   └── manufacturer-audit.md       # 制造商与供应链审计：生产模式、查询渠道、贴牌信号、代工厂打分
 └── scripts/
-    └── premium_decision.py         # 溢价-风险对价计算器
+    ├── premium_decision.py         # 溢价-风险对价计算器
+    └── check_update.py             # 版本自检（24h 缓存，失败静默）
 ```
 
 ## 更新日志
+
+### v4.3.1 · 2026-11-19
+
+**新增版本自检，不阻断主流程。**
+
+| 新增 | 内容 |
+|---|---|
+| `scripts/check_update.py` | 零依赖（标准库）。读本地 SKILL.md 的 version，请求 GitHub raw 的远端版本比对。输出 JSON：`status / local / remote / has_update / level(major·minor·patch) / cached`。24 小时缓存于 `~/.cache/bilei-skill/`，4 秒超时，任何异常都返回 skipped，退出码恒为 0。 |
+| SKILL.md「版本自检」小节 | 调用时执行一次；**只有发现新版才在报告最末尾加一行提示**，不进第一屏、不影响结论、不重复提醒；失败静默跳过，不打扰用户。 |
+
+> 说明：Skill 没有后台进程，无法定时自检，只能在被调用时检查一次。远端版本取 GitHub raw 的 SKILL.md（发布源），因为 SkillHub 搜索 API 不返回 version 字段。
 
 ### v4.3.0 · 2026-11-19
 
