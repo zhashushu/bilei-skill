@@ -67,7 +67,7 @@ jobs:
           fi
           clawhub login --token "$CLAWHUB_TOKEN" --label "github-ci"
           rm -rf /tmp/clh-pkg && mkdir -p /tmp/clh-pkg
-          rsync -a --exclude .git --exclude .github --exclude .DS_Store ./ /tmp/clh-pkg/
+          rsync -a --exclude .git --exclude .github --exclude .DS_Store --exclude .gitignore --exclude local-blocklist.md ./ /tmp/clh-pkg/
           clawhub publish /tmp/clh-pkg \
             --slug bilei \
             --name "避雷.skill" \
@@ -88,5 +88,5 @@ jobs:
           fi
           skillhub login --key "$SKILLHUB_KEY" --host https://api.skillhub.cn
           rm -rf /tmp/skh-pkg && mkdir -p /tmp/skh-pkg
-          rsync -a --exclude LICENSE --exclude .git --exclude .github --exclude .DS_Store ./ /tmp/skh-pkg/
+          rsync -a --exclude LICENSE --exclude .git --exclude .github --exclude .DS_Store --exclude .gitignore --exclude local-blocklist.md ./ /tmp/skh-pkg/
           skillhub publish /tmp/skh-pkg --changelog "auto publish from github"
