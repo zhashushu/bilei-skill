@@ -2,9 +2,9 @@
 
 English ｜ [中文](README.md)
 
-**One sentence to start, graded by evidence; if it cannot be verified, it says none right now.**
-
-Better to skip than to buy wrong. Before you pay, check administrative penalties, failed inspections and recalls, and keep the recommendation inside the evidence.
+> **Before you buy anything, check the negative data PR can't touch, then decide whether to pay.**
+>
+> Better to skip than to buy wrong.
 
 ## Install
 
@@ -52,6 +52,17 @@ The same screen also listed: knob turns but is not wired; coating migration may 
 | Heavy | Full audit over ¥2000, and for safety-critical categories | Evidence / quantitative comparison / verdict / price intel, role-isolated; price lookup happens after the verdict | [bilei-team-skill](https://github.com/zhashushu/bilei-team-skill) |
 
 If this run was useful, star the repo, and name the next category in an issue.
+
+---
+
+Renovating your new home, you want a reliable air conditioner —
+
+Every search returns pure praise, not a single negative.
+The comparison reviewers are "you know what",
+the feeds are flooded with GEO-poisoned posts by amateur accounts,
+the few negatives get PR'd away, then buried by the algorithm.
+
+Even a 17-year ad-industry veteran can't escape it. What about everyone else?
 
 ---
 
