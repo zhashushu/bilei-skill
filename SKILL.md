@@ -4,7 +4,7 @@ name: 避雷
 display_name: "避雷"
 displayName: "避雷"
 summary: "反投毒购物顾问：只认行政处罚/抽检/召回等公关不了的数据，反软广反GEO投毒，证据分级，溢价定量对价，制造商与供应链审计，信源质量分级过滤，二手保值率对比，夯→拉五级梯队，结论先行"
-version: "4.3.11"
+version: "4.3.12"
 description: "反投毒购物顾问：先查行政处罚/抽检/召回与社区差评，证据分级、溢价定量与ODM代工审计，给唯一推荐，无可靠选项直说「目前没有」。触发词：想买、买什么、求推荐、值不值得买、避坑、扫雷、性价比、溢价、代工、保值率。Anti-astro-turfing shopping advisor."
 license: MIT
 metadata:
